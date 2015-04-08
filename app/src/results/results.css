@@ -1,0 +1,9 @@
+.results-list {
+	width: 30%;
+	float: left;
+}
+
+.results-details {
+	width:70%;
+	float:right;
+}

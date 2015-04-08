@@ -1,0 +1,17 @@
+<div>
+	<br>
+	<input ng-hide="showAdv" ng-model="api.searchText" ng-change="validate()" style="border: 1px solid #000; height: 50px; width: 200px; font-size: 250%;">
+
+	<div ng-show="showAdv">This is the advanced search<br>
+		Location<input type="text" ng-model="searchObj.location"><br>
+		Calories<input type="text" ng-model="searchObj.calories"><br>
+		Price<input type="text" ng-model="searchObj.price"><br>
+	</div>
+	
+	<a href="#/results" ng-click="handleClick()">Search</a>
+
+	<div ng-hide="isValid">Not valid input. Only letters are allowed.</div>
+
+	<button ng-click="(showAdv)?showAdv=false:showAdv=true;">Toggle Advanced Search</button>
+	
+</div>

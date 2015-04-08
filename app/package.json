@@ -1,0 +1,8 @@
+{
+  "name": "food-dictionary",
+  "version": "1.0.0",
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "grunt-ngmin":"0.0.3"
+  }
+}
