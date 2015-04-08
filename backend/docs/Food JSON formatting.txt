@@ -1,0 +1,22 @@
+{ "foods" : 
+	[
+		{ "name":"22 Club",
+		"restaurant":"Station 22",
+		"location": "22 W Center St, Provo, UT 84601",
+		"price":9.99,
+		"calories":-1,
+		"type":"sandwich",
+		"ingredients":["turkey","bacon","lettuce","tomato","pickled onions","avocado","garlic mayo","focaccia"],
+		"image":"http://s3-media1.fl.yelpcdn.com/bphoto/nRkwGDj6eet78lx3UenvLQ/l.jpg"
+		},
+		{"name":"asian citrus chicken salad",
+		    "restaurant":"Zupas",
+		"location":"408 W 2230 N, Provo, UT 84604",
+		    "price":6.99,
+		    "calories":400,
+		"type":"salad",
+		    "ingredients":["chicken","orange","lettuce","wonton strips","snap peas","cashews","cucumber","peppers","edamame", "yuzu miso vinaigrette"],
+		    "image":"http://cafezupas.com/wp-content/uploads/2014/11/asian_citrus.jpg"
+		}	
+	]
+}
