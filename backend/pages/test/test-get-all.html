@@ -1,0 +1,47 @@
+<html>
+
+<head>
+	<!-- How do you know what content to put in your headers? And in what format? -->
+	<title>GET All Test</title>
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script> <!-- This imports JQuery -->
+</head>
+
+<body>
+
+<div id="main">
+		
+	<!-- http://stackoverflow.com/questions/21506276/how-do-i-make-the-text-box-bigger-in-html-css -->
+	<form id="get-all-food">
+	URL: <input id="url" type="text" style="width:700px" value="http://52.11.71.104:80/details"><br><br>
+	<input type="submit" value="Get all food items in DB">
+	</form>
+
+	<div id="results"></div>
+
+</div>
+
+<script type="text/javascript">
+	$( "#get-all-food" ).submit(function () {
+		
+		var submitFoodURL = $( "#url" ).val();
+		$.getJSON( submitFoodURL, function( data ) {
+			// try {
+			// 	var fromServer = JSON.parse( data );
+			// 	for( var i = 0; i < fromServer.length; i++ ) { 
+			// 		console.log( fromServer[ i ]._id );
+			// 	}
+			// } catch ( e ) {
+			// 	console.log( "DIDN'T PARSE JSON " + e );
+			// }
+
+			$( "#results" ).html( "<p>" + JSON.stringify( data ) + "</p>" );
+		});
+
+		return false;
+	});
+
+</script>
+
+</body>
+
+</html>

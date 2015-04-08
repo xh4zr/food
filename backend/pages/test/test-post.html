@@ -1,0 +1,73 @@
+<html>
+
+<head>
+	<!-- How do you know what content to put in your headers? And in what format? -->
+	<title>POST Test</title>
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script> <!-- This imports JQuery -->
+</head>
+
+<body>
+
+<div id="post">
+		
+	<!-- http://stackoverflow.com/questions/21506276/how-do-i-make-the-text-box-bigger-in-html-css -->
+	<form id="post-food-form">
+	POST URL: <input id="post-url" type="text" style="width:700px" value="http://52.11.71.104:80/details"><br><br>
+	Food name: <input id="food-name" type="text" style="width:700px" value=""><br><br>
+	Food description: <input id="food-description" type="text" style="width:700px" value=""><br><br>
+	Restaurant name: <input id="restaurant-name" type="text" style="width:700px" value=""><br><br>
+	Restaurant location: <input id="restaurant-location" type="text" style="width:700px" value=""><br><br>
+	Food price: <input id="food-price" type="text" style="width:700px" value=""><br><br>
+	Number of calories: <input id="num-calories" type="text" style="width:700px" value=""><br><br>
+	Food type: <input id="food-type" type="text" style="width:700px" value=""><br><br>
+	Tags (put a comma after each element except for the last one):<input id="food-tags" type="text" style="width:800px" value=""><br><br>
+	Image URL: <input id="image-url" type="text" style="width:700px" value=""><br><br>
+	<input type="submit" value="Submit POST info">
+	</form>
+
+	<div id="status"></div>
+
+</div>
+
+<script type="text/javascript">
+	$( "#post-food-form" ).submit(function () {
+		
+		var submitFoodURL = $( "#post-url" ).val();
+		var currFood = 
+				{
+					"food_name": $( "#food-name" ).val(),
+					"food_description": $( "#food-description" ).val(),
+					"restaurant":$( "#restaurant-name" ).val(),
+					"restaurant_location": $( "#restaurant-location" ).val(),
+					"price": $( "#food-price" ).val(),
+					"calories": $( "#num-calories" ).val(),
+					"food_type": $( "#food-type" ).val(),
+					"food_tags": "[" + $( "#food-tags" ).val() + "]",
+					"image": $( "#image-url" ).val()
+				};
+
+		var currJSON = JSON.stringify( currFood );
+		jQuery.ajax({
+			url: submitFoodURL,
+			type: "POST",
+			data: currJSON,
+			datatype: "json",
+			contentType: "application/json; charset=utf-8",
+			success: function( data, textStatus ) {
+				var msg = "<p>Food submitted successfully!</p>"
+				if( textStatus !== "success" ) {
+					msg = "<p>" + textStatus.toString() + "</p>";
+				} else {
+					$( "#status" ).html( msg );
+				}
+			}
+		});
+
+	 	return false;
+	});
+
+</script>
+
+</body>
+
+</html>
