@@ -9,7 +9,10 @@ var url = require( 'url' );
 
 
 // Static variables
-
+var HTTP_PORT_NUM = 8080;
+var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
+var MONGO_DB_NAME = "admin";
+var MONGO_COLLECTION_NAME = "FoodSearchEngine";
 var ROOT_DIR = "pages/";
 
 
@@ -20,11 +23,6 @@ var express = require( 'express' );
 var app = express();
 app.use( bodyParser() );
 app.use( '/', express.static( ROOT_DIR, { maxAge: 60*60*1000 } ) ); // maxAge: http://blog.modulus.io/nodejs-and-express-static-content
-
-var HTTP_PORT_NUM = 8080;
-var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
-var MONGO_DB_NAME = "admin";
-var MONGO_COLLECTION_NAME = "FoodSearchEngine";
 
 http.createServer( app ).listen( HTTP_PORT_NUM );
 
@@ -113,29 +111,36 @@ app.get( '/details', function( req, res ) {
 			fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes) {
 				if( err )
 					throw err;
-				dishes.find( { "_id": new ObjectID( queryString ) }, function( err, matchingDishes ) {
-					matchingDishes.toArray( function( err, matchingDishesArr ) {
-						var returnObj = [];
-						for(var i = 0; i < matchingDishesArr.length; i++) {
-							returnObj.push(
-								{ 
-									"id": matchingDishesArr[ i ]._id,
-									"food_name": matchingDishesArr[ i ].food_name,
-									"food_description": matchingDishesArr[ i ].food_description,
-									"restaurant": matchingDishesArr[ i ].restaurant,
-									"restaurant_location": matchingDishesArr[ i ].restaurant_location,
-									"price": matchingDishesArr[ i ].price,
-									"calories": matchingDishesArr[ i ].calories,
-									"type": matchingDishesArr[ i ].food_type,
-									"tags": matchingDishesArr[ i ].food_tags,
-									"image": matchingDishesArr[ i ].image
-								}
-							);
-						};
-						res.writeHead( 200 );
-						res.end( JSON.stringify( returnObj ) );
+				try {
+					dishes.find( { "_id": new ObjectID( queryString ) }, function( err, matchingDishes ) {
+						matchingDishes.toArray( function( err, matchingDishesArr ) {
+
+							var returnObj = [];
+							for(var i = 0; i < matchingDishesArr.length; i++) {
+								returnObj.push(
+									{ 
+										"id": matchingDishesArr[ i ]._id,
+										"food_name": matchingDishesArr[ i ].food_name,
+										"food_description": matchingDishesArr[ i ].food_description,
+										"restaurant": matchingDishesArr[ i ].restaurant,
+										"restaurant_location": matchingDishesArr[ i ].restaurant_location,
+										"price": matchingDishesArr[ i ].price,
+										"calories": matchingDishesArr[ i ].calories,
+										"type": matchingDishesArr[ i ].food_type,
+										"tags": matchingDishesArr[ i ].food_tags,
+										"image": matchingDishesArr[ i ].image
+									}
+								);
+							};
+							res.writeHead( 200 );
+							res.end( JSON.stringify( returnObj ) );
+						} );
 					} );
-				} );
+				} catch ( e ) {
+					console.log( e );
+					res.writeHead( 400 );
+					res.end( e.message );
+				}
 			});
 		});
 
