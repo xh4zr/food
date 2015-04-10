@@ -9,5 +9,6 @@ angular.module('app.list',[]).controller('listCtrl', function($scope, foodApi) {
     $scope.isSelectedFood = function(food){
         return $scope.selectedFood !== null && food.name === $scope.selectedFood.name;
     }
+    
 
 });

@@ -27,11 +27,13 @@ function searchCtrl($scope, foodApi) {
 		if (!foodApi.searchText)
 			return;
 
-		var regex = new RegExp(/^[a-zA-Z\-]+$/gmi);
+		var regex = new RegExp(/^[a-zA-Z\-\s]+$/gmi);
 		$scope.isValid = regex.test(foodApi.searchText);
 	}
+//	console.log(foodApi.searchText)
 
 	$scope.searchObj = {
+//		search:null,
 		location:null,
 		price:null,
 		calories:null
