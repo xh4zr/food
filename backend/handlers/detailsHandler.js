@@ -6,7 +6,7 @@ var url = require( 'url' );
 
 // Return all the objects in the database that match the specified query
 // If the query term isnt recognized (or there isn't one), return all the objects in the database
-module.exports.handleGETEvent = function( req, res, MONGO_DB_ADDR, MONGO_DB_NAME, MONGO_COLLECTION_NAME ) {
+module.exports.handleGETEvent = function( req, res ) {
 
 	var urlObj = url.parse( req.url, true, false );
 
@@ -26,7 +26,7 @@ module.exports.handleGETEvent = function( req, res, MONGO_DB_ADDR, MONGO_DB_NAME
 
 			matchingDishes.toArray( function( err, matchingDishesArr ) {
 					
-				var returnObj = createDishesJSON( matchingDishesArr, function( returnObj ) {
+				var returnObj = module.exports.createDishesJSON( matchingDishesArr, function( returnObj ) {
 
 					res.writeHead( 200 );
 					res.end( JSON.stringify( returnObj ) );
@@ -50,26 +50,14 @@ module.exports.handleGETEvent = function( req, res, MONGO_DB_ADDR, MONGO_DB_NAME
 
 function defaultServerAction( req, res ) {
 
-	dbManager.getAllObjects( function( err, allDishes ) {
-		if( err )
-			console.log( err.message );
-
-		allDishes.toArray( function( err2, allDishesArr ) {
-			if( err2 )
-				console.log( err2.message );	
-
-			var returnObj = createDishesJSON( allDishesArr, function( returnObj ) {
-				res.writeHead( 200 );
-				res.end( JSON.stringify( returnObj ) );
-			} );
-		} );
-	});
+	res.writeHead( 400 );
+	res.end( "Bad request" );
 
 };
 
 
 
-function createDishesJSON( dishesArr, callback ) {
+module.exports.createDishesJSON = function( dishesArr, callback ) {
 	
 	var returnObj = [];
 

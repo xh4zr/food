@@ -41,20 +41,8 @@ module.exports.handleGETEvent = function( req, res ) {
 
 function defaultServerAction( req, res ) {
 
-	dbManager.getAllObjects( function( err, allDishes ) {
-		if( err )
-			console.log( err.message );
-
-		allDishes.toArray( function( err2, allDishesArr ) {
-			if( err2 )
-				console.log( err2.message );	
-
-			var returnObj = createAbbreviatedDishesJSON( allDishesArr, function( returnObj ) {
-				res.writeHead( 200 );
-				res.end( JSON.stringify( returnObj ) );
-			} );
-		} );
-	});
+	res.writeHead( 400 );
+	res.end( "Bad request" );
 
 };
 

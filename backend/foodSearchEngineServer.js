@@ -5,8 +5,9 @@ var fs = require( 'fs' );
 var http = require( 'http' );
 
 // Handler files
-var searchHandler = require( './handlers/searchHandler.js' );
+var allHandler = require( './handlers/allHandler.js' );
 var detailsHandler = require( './handlers/detailsHandler.js' );
+var searchHandler = require( './handlers/searchHandler.js' );
 
 
 
@@ -47,4 +48,8 @@ app.get( '/details', function( req, res ) {
 
 app.post( '/details', function( req, res ) {
 	detailsHandler.handlePOSTEvent( req, res );
+} );
+
+app.get( '/all', function( req, res ) {
+	allHandler.handleGETEvent( req, res );
 } );
