@@ -29,23 +29,27 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/search/search.html',
-    "<div>\n" +
+    "<div id = \"all\">\n" +
     "\t<br>\n" +
-    "\t<input ng-hide=\"showAdv\" ng-model=\"api.searchText\" ng-change=\"validate()\" style=\"border: 1px solid #000; height: 50px; width: 200px; font-size: 250%;\">\n" +
+    "\t<br>\n" +
+    "\t<div id = \"search\">\n" +
+    "\t\t<input id = \"searchBar\"  ng-model=\"api.searchText\" ng-change=\"validate()\"><br>\n" +
+    "\t</div>\n" +
     "\n" +
-    "\t<div ng-show=\"showAdv\">This is the advanced search<br>\n" +
-    "\t\tLocation<input type=\"text\" ng-model=\"searchObj.location\"><br>\n" +
-    "\t\tCalories<input type=\"text\" ng-model=\"searchObj.calories\"><br>\n" +
-    "\t\tPrice<input type=\"text\" ng-model=\"searchObj.price\"><br>\n" +
+    "\t<div id = \"advanced\" ng-show=\"showAdv\"><br>\n" +
+    "\t\tLocation<input id = \"advBar\" type=\"text\" ng-model=\"searchObj.location\"><br>\n" +
+    "\t\tCalories<input id = \"advBar\" type=\"text\" ng-model=\"searchObj.calories\"><br>\n" +
+    "\t\tPrice<input id = \"advBar\" type=\"text\" ng-model=\"searchObj.price\"><br>\n" +
     "\t</div>\n" +
     "\t\n" +
-    "\t<a href=\"#/results\" ng-click=\"handleClick()\">Search</a>\n" +
     "\n" +
     "\t<div ng-hide=\"isValid\">Not valid input. Only letters are allowed.</div>\n" +
     "\n" +
-    "\t<button ng-click=\"(showAdv)?showAdv=false:showAdv=true;\">Toggle Advanced Search</button>\n" +
-    "\t\n" +
-    "</div>"
+    "\t<div id = \"bothButtons\">\t\n" +
+    "\t\t<a id = \"searchButton\" href=\"#/results\" ng-click=\"handleClick()\">Search</a>\n" +
+    "\t\t<button id = \"toggleButton\" ng-click=\"(showAdv)?showAdv=false:showAdv=true;\">Toggle Advanced Search</button>\n" +
+    "\t</div>\n" +
+    "</div>\n"
   );
 
 }]);
