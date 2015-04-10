@@ -2,7 +2,8 @@ angular.module('app',[
 	'ui.router',
 	'app.foodApi',
 	'app.search',
-	'app.list'
+	'app.list',
+	'app.details'
 ]).config(config);
 
 function config($stateProvider, $urlRouterProvider, $locationProvider) {
@@ -26,7 +27,8 @@ function config($stateProvider, $urlRouterProvider, $locationProvider) {
 					controller:'listCtrl'
 				},
 				'details@results': {
-					templateUrl:'src/results/details.html'
+					templateUrl:'src/results/details.html',
+					controller:'detailsCtrl'
 				}
 			}
 		});
