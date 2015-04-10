@@ -8,27 +8,37 @@ module.exports.handleGETEvent = function( req, res ) {
 
 	var urlObj = url.parse( req.url, true, false );
 
-	if( urlObj.query[ "term" ] ) {
+	if( urlObj.query[ "term" ] &&
+		!urlObj.query[ "location" ] && 
+		!urlObj.query[ "price" ] &&
+		!urlObj.query[ "calories" ] ) {
 		
 		var term = urlObj.query[ "term" ];
 
 		dbManager.basicSearch( term, function( matchingDishes ) {
-
-			matchingDishes.toArray( function( err, matchingDishesArr ) {
-
-				if( err )
-					console.log( err );
-
-				var returnObj = createAbbreviatedDishesJSON( matchingDishesArr, function( returnObj ) {
-					res.writeHead( 200 );
-					res.end( JSON.stringify( returnObj ) );
-				} );
-
+			packageDishesJSON( matchingDishes, function( returnObj ) {
+				res.writeHead( 200 );
+				res.end( JSON.stringify( returnObj ) );
 			} );
-
 		} );
 
 		return;
+
+	} else if( urlObj.query[ "term" ] &&
+		( urlObj.query[ "location" ] || urlObj.query[ "price" ] || urlObj.query[ "calories" ] ) ) {
+
+		var term = urlObj.query[ "term" ];
+		var restaurant_location = urlObj.query[ "location" ];
+		var price = urlObj.query[ "price" ];
+		var calories = urlObj.query[ "calories" ];
+
+		dbManager.advancedSearch( term, restaurant_location, price, calories, function( matchingDishes ) {
+			packageDishesJSON( matchingDishes, function( returnObj ) {
+				res.writeHead( 200 );
+				res.end( JSON.stringify( returnObj ) );
+			} );
+		} );
+
 
 	} else {
 		
@@ -39,10 +49,18 @@ module.exports.handleGETEvent = function( req, res ) {
 	}
 };
 
-function defaultServerAction( req, res ) {
+function packageDishesJSON( matchingDishes, callback ) {
 
-	res.writeHead( 400 );
-	res.end( "Bad request" );
+	matchingDishes.toArray( function( err, matchingDishesArr ) {
+
+		if( err )
+			console.log( err );
+
+		var returnObj = createAbbreviatedDishesJSON( matchingDishesArr, function( returnObj ) {
+			callback( returnObj );
+		} );
+
+	} );
 
 };
 
@@ -62,4 +80,11 @@ function createAbbreviatedDishesJSON( dishesArr, callback ) {
 	};
 
 	return callback( returnObj );
+};
+
+function defaultServerAction( req, res ) {
+
+	res.writeHead( 400 );
+	res.end( "Bad request" );
+
 };

@@ -10,7 +10,14 @@ module.exports.handleGETEvent = function( req, res ) {
 
 	var urlObj = url.parse( req.url, true, false );
 
-	if( urlObj.query[ "id" ] ) {
+	if( urlObj.query[ "term" ] || 
+		urlObj.query[ "location" ] || 
+		urlObj.query[ "price" ] ||
+		urlObj.query[ "calories" ] ) {
+
+		defaultServerAction( req, res );
+
+	} else if( urlObj.query[ "id" ] ) {
 		
 		var id = urlObj.query[ "id" ];
 

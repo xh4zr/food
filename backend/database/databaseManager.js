@@ -8,31 +8,27 @@ var MONGO_DB_NAME = "admin";
 var MONGO_COLLECTION_NAME = "FoodSearchEngine";
 
 module.exports.advancedSearch = function( term, restaurant_location, price, calories, callback ) {
-	// restaurant_location
-	// price
-	// calories
+	console.log("ADVANCED");
+	// module.exports.basicSearch( term, function( matchingDishes ) {
+	// 	callback( matchingDishes );
+	// });
+
+
+	
 };
 
 
 module.exports.basicSearch = function( term, callback ) {
 
-	var regex = new RegExp( term, "i" );
+	searchByTerm( term, function( matchingDishes ) {
 
-	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
-		var fseDB = db.db( MONGO_DB_NAME );
-		fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes ) {
-			if( err )
-				console.log( err );
+		callback( matchingDishes );
 
-			dishes.find( { food_name : regex }, function( err2, matchingDishes ) {
-				if( err2 )
-					console.log( err2 );
+	} );	
 
-				callback( matchingDishes );
-				
-			} );
-		});
-	});
+};
+
+function combineResultsArrays( arr1, arr2 ) {
 
 };
 
@@ -48,6 +44,18 @@ module.exports.createNewFoodEntry = function( foodObj, callback ) {
 
 		} );
 	});
+
+};
+
+function filterByCalories( calories, callback ) {
+
+};
+
+function filterByRestaurantLocation( restaurant_location, callback ) {
+
+};
+
+function filterByPrice( price, callback ) {
 
 };
 
@@ -93,6 +101,28 @@ module.exports.searchByID = function( id, callback ) {
 				callback( e, null );
 			}
 
+		});
+	});
+
+};
+
+function searchByTerm( term, callback ) {
+	
+	var regex = new RegExp( term, "i" );
+
+	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+		var fseDB = db.db( MONGO_DB_NAME );
+		fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes ) {
+			if( err )
+				console.log( err );
+
+			dishes.find( { food_name : regex }, function( err2, matchingDishes ) {
+				if( err2 )
+					console.log( err2 );
+
+				callback( matchingDishes );
+				
+			} );
 		});
 	});
 
