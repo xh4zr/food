@@ -12,9 +12,6 @@ var detailsHandler = require( './handlers/detailsHandler.js' );
 
 // Static variables
 var HTTP_PORT_NUM = 8080;
-var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
-var MONGO_DB_NAME = "admin";
-var MONGO_COLLECTION_NAME = "FoodSearchEngine";
 var ROOT_DIR = "pages/";
 
 
@@ -39,13 +36,13 @@ app.get( '/', function( req, res ) {
 } );
 
 app.get( '/search', function( req, res) {
-	searchHandler.handleGETEvent( req, res, MONGO_DB_ADDR, MONGO_DB_NAME, MONGO_COLLECTION_NAME );
+	searchHandler.handleGETEvent( req, res );
 } );
 
 app.get( '/details', function( req, res ) {
-	detailsHandler.handleGETEvent( req, res, MONGO_DB_ADDR, MONGO_DB_NAME, MONGO_COLLECTION_NAME );
+	detailsHandler.handleGETEvent( req, res );
 });
 
 app.post( '/details', function( req, res ) {
-	detailsHandler.handlePOSTEvent( req, res, MONGO_DB_ADDR, MONGO_DB_NAME, MONGO_COLLECTION_NAME );
+	detailsHandler.handlePOSTEvent( req, res );
 } );
