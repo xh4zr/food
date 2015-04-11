@@ -30,7 +30,17 @@
 </div>
 
 <script type="text/javascript">
-	$( "#post-food-form" ).submit(function () {
+	$( "#post-food-form" ).submit( function () {
+
+
+		var foodTagsArr = ( $( "#food-tags" ).val() ).split( "," );
+		// console.log( foodTagsArr );
+		var foodTagsCombined = [];
+		for( var i = 0; i < foodTagsArr.length; i++ ) {
+			foodTagsCombined.push(
+				{ "food_tag": foodTagsArr[ i ] }
+			);
+		}
 		
 		var submitFoodURL = $( "#post-url" ).val();
 		var currFood = 
@@ -42,7 +52,7 @@
 					"price": $( "#food-price" ).val(),
 					"calories": $( "#num-calories" ).val(),
 					"food_type": $( "#food-type" ).val(),
-					"food_tags": "[" + $( "#food-tags" ).val() + "]",
+					"food_tags": foodTagsCombined,
 					"image": $( "#image-url" ).val()
 				};
 

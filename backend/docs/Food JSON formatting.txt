@@ -26,7 +26,16 @@
 			"price":9.99,
 			"calories":327,
 			"food_type":"sandwich",
-			"food_tags":["turkey","bacon","lettuce","tomato","pickled onions","avocado","garlic mayo","focaccia"],
+			"food_tags":[
+				"food_tag": "turkey",
+				"food_tag": "bacon",
+				"food_tag": "lettuce",
+				"food_tag": "tomato",
+				"food_tag": "pickled onions",
+				"food_tag": "avocado",
+				"food_tag": "garlic mayo",
+				"food_tag": "focaccia"
+			],
 			"image":"http://s3-media1.fl.yelpcdn.com/bphoto/nRkwGDj6eet78lx3UenvLQ/l.jpg"
 		},
 		{	

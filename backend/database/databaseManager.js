@@ -6,6 +6,12 @@ var mongoClient = require( 'mongodb' ).MongoClient;
 var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
 var MONGO_DB_NAME = "admin";
 var MONGO_COLLECTION_NAME = "FoodSearchEngine";
+var ADVSRCH_L = "advSearchLP";
+var ADVSRCH_LP = "advSearchLP";
+var ADVSRCH_LC = "advSearchLC";
+var ADVSRCH_LPC = "advSearchLPC"; // Advanced Search - location price and calories option
+
+
 
 module.exports.advancedSearch = function( term, restaurant_location, price, calories, callback ) {
 	console.log("ADVANCED");
@@ -20,15 +26,21 @@ module.exports.advancedSearch = function( term, restaurant_location, price, calo
 
 module.exports.basicSearch = function( term, callback ) {
 
-	searchByTerm( term, function( matchingDishes ) {
+	var regex = new RegExp( term, "i" );
+	var basicQuery = {
+					$or: [
+						{ food_name : regex },
+						{ food_description : regex },
+						{ food_type : regex },
+						{ "food_tags.food_tag" : regex }
+					]
+				};
+
+	searchByQuery( basicQuery, function( matchingDishes ) {
 
 		callback( matchingDishes );
 
 	} );	
-
-};
-
-function combineResultsArrays( arr1, arr2 ) {
 
 };
 
@@ -47,16 +59,21 @@ module.exports.createNewFoodEntry = function( foodObj, callback ) {
 
 };
 
-function filterByCalories( calories, callback ) {
+function createQuery( queryType, term, callback ) {
+
+	var regex = new RegExp( term, "i" );
+
+
 
 };
 
-function filterByRestaurantLocation( restaurant_location, callback ) {
+function determineAdvancedSearchType( restaurant_location, price, calories, callback ) {
 
-};
 
-function filterByPrice( price, callback ) {
 
+	if( restaurant_location && price && calories ) {
+		callback(  );
+	}
 };
 
 module.exports.getAllObjects = function( callback ) {
@@ -106,9 +123,14 @@ module.exports.searchByID = function( id, callback ) {
 
 };
 
-function searchByTerm( term, callback ) {
-	
-	var regex = new RegExp( term, "i" );
+/*
+ * Uses the given query to return results from the database
+ */
+
+ // http://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html
+ // See the sections on the $or function and on queries inside objects and arrays
+
+function searchByQuery( query, callback ) {
 
 	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
 		var fseDB = db.db( MONGO_DB_NAME );
@@ -116,7 +138,13 @@ function searchByTerm( term, callback ) {
 			if( err )
 				console.log( err );
 
-			dishes.find( { food_name : regex }, function( err2, matchingDishes ) {
+			// dishes.find( {
+			// 				$or: [
+			// 					{ food_name : regex },
+			// 					{ "food_tags.food_tag" : regex }
+			// 				]
+			// 			},
+			dishes.find( query, function( err2, matchingDishes ) {
 				if( err2 )
 					console.log( err2 );
 

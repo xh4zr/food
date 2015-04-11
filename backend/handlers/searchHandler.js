@@ -8,6 +8,9 @@ module.exports.handleGETEvent = function( req, res ) {
 
 	var urlObj = url.parse( req.url, true, false );
 
+	// Basic search only happens when the term query exists and when there isn't a
+	// location, price, or calories query along with it
+
 	if( urlObj.query[ "term" ] &&
 		!urlObj.query[ "location" ] && 
 		!urlObj.query[ "price" ] &&
@@ -24,7 +27,12 @@ module.exports.handleGETEvent = function( req, res ) {
 
 		return;
 
-	} else if( urlObj.query[ "term" ] &&
+	} 
+
+	// Advanced search only happens when the term query exists and when at least one of either 
+	// location, price, or calories queries also exist
+
+	else if( urlObj.query[ "term" ] &&
 		( urlObj.query[ "location" ] || urlObj.query[ "price" ] || urlObj.query[ "calories" ] ) ) {
 
 		var term = urlObj.query[ "term" ];
