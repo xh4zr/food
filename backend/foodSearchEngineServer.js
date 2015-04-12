@@ -13,7 +13,7 @@ var searchHandler = require( './handlers/searchHandler.js' );
 
 
 // Static variables
-var HTTP_PORT_NUM = 8080;
+var HTTP_PORT_NUM = 80;
 var MONGO_DB_ADDR = 'mongodb://52.11.71.104/cs360fse';
 var ROOT_DIR = "pages/";
 var TEST_DIR = "test/";
