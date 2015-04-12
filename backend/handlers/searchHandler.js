@@ -11,38 +11,41 @@ module.exports.handleGETEvent = function( req, res ) {
 	// Basic search only happens when the term query exists and when there isn't a
 	// location, price, or calories query along with it
 
-	if( urlObj.query[ "term" ] &&
-		!urlObj.query[ "location" ] && 
-		!urlObj.query[ "price" ] &&
-		!urlObj.query[ "calories" ] ) {
+	// if( urlObj.query[ "term" ] &&
+	// 	!urlObj.query[ "location" ] && 
+	// 	!urlObj.query[ "price" ] &&
+	// 	!urlObj.query[ "calories" ] ) {
 		
-		var term = urlObj.query[ "term" ];
+	// 	var term = urlObj.query[ "term" ];
 
-		// dbManager.basicSearch( term, function( matchingDishes ) {
-		// 	packageDishesJSON( matchingDishes, function( returnObj ) {
-		// 		res.writeHead( 200 );
-		// 		res.end( JSON.stringify( returnObj ) );
-		// 	} );
-		// } );
+	// 	// dbManager.basicSearch( term, function( matchingDishes ) {
+	// 	// 	packageDishesJSON( matchingDishes, function( returnObj ) {
+	// 	// 		res.writeHead( 200 );
+	// 	// 		res.end( JSON.stringify( returnObj ) );
+	// 	// 	} );
+	// 	// } );
 
-		dbManager.basicSearch( term, function( matchingDishesArr ) {
+	// 	dbManager.basicSearch( term, function( matchingDishesArr ) {
 
-			createAbbreviatedDishesJSON( matchingDishesArr, function( returnObj ) {
-				res.writeHead( 200 );
-				res.end( JSON.stringify( returnObj ) );
-			} );
-		} );
+	// 		createAbbreviatedDishesJSON( matchingDishesArr, function( returnObj ) {
+	// 			res.writeHead( 200 );
+	// 			res.end( JSON.stringify( returnObj ) );
+	// 		} );
+	// 	} );
 
-		return;
+	// 	return;
 
-	} 
+	// } 
 
 	// Advanced search only happens when the term query exists and when at least one of either 
 	// location, price, or calories queries also exist
 
-	// else if( urlObj.query[ "term" ] &&
+	// VER 1 
+	// if( urlObj.query[ "term" ] &&
 	// 	( urlObj.query[ "location" ] || urlObj.query[ "price" ] || urlObj.query[ "calories" ] ) ) {
-	else if( urlObj.query[ "term" ] || urlObj.query[ "location" ] || urlObj.query[ "price" ] || urlObj.query[ "calories" ] ) {
+	// VER 2 for searching LPC queries individually 
+	// if( urlObj.query[ "term" ] || urlObj.query[ "location" ] || urlObj.query[ "price" ] || urlObj.query[ "calories" ] ) {
+	if( urlObj.query[ "term" ] ) {
 
 		var term = urlObj.query[ "term" ];
 		var restaurant_location = urlObj.query[ "location" ];

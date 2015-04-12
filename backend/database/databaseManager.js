@@ -14,7 +14,6 @@ var ADVSRCH_TPC = "advSearchTPC"; // Advanced Search - term price and calories o
 var ADVSRCH_TLPC = "advSearchTLPC"; // Advanced Search - term location price and calories option
 var BSCSRCH = "basicSearch";
 var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
-// var MONGO_DB_NAME = "admin";
 var MONGO_DB_NAME = "cs360fse";
 var MONGO_COLLECTION_NAME = "fooditems";
 
@@ -39,7 +38,7 @@ module.exports.advancedSearch = function( term, restaurant_location, price, calo
 
 	determineAdvancedSearchType( term, restaurant_location, price, calories, function( queryType ) {
 
-		createAdvancedQuery( queryType, term, restaurant_location, price, calories, function( advancedQuery ) {
+		createAdvancedQuery( queryType, term, restaurant_location, price, calories, function( advancedQuery ) {			
 
 			searchByQuery( advancedQuery, function( err, matchingDishesArr ) {
 
@@ -54,33 +53,33 @@ module.exports.advancedSearch = function( term, restaurant_location, price, calo
 };
 
 
-module.exports.basicSearch = function( term, callback ) {
+// module.exports.basicSearch = function( term, callback ) {
 
-	debugger;
+// 	debugger;
 
-	// var regex = new RegExp( term, "i" );
-	// var basicQuery = {
-	// 				$or: [
-	// 					{ food_name : regex },
-	// 					{ food_description : regex },
-	// 					{ food_type : regex },
-	// 					{ "food_tags.food_tag" : regex }
-	// 				]
-	// 			};
+// 	// var regex = new RegExp( term, "i" );
+// 	// var basicQuery = {
+// 	// 				$or: [
+// 	// 					{ food_name : regex },
+// 	// 					{ food_description : regex },
+// 	// 					{ food_type : regex },
+// 	// 					{ "food_tags.food_tag" : regex }
+// 	// 				]
+// 	// 			};
 
-	createBasicQuery( term, function( basicQuery ) {
+// 	createBasicQuery( term, function( basicQuery ) {
 
-		searchByQuery( basicQuery, function( err, matchingDishes ) {
+// 		searchByQuery( basicQuery, function( err, matchingDishes ) {
 
-			callback( matchingDishes );
+// 			callback( matchingDishes );
 
-		} );		
+// 		} );		
 
-	} );
+// 	} );
 
 			
 
-};
+// };
 
 function createAdvancedQuery( queryType, term, restaurant_location2, price2, calories2, callback ) {
 
@@ -208,9 +207,17 @@ function createAdvancedQuery( queryType, term, restaurant_location2, price2, cal
 	// Default option - basic search
 
 	else {
-		createBasicQuery( term, function( basicQuery ) {
-			returnQuery = basicQuery;
-		} );
+		// createBasicQuery( term, function( basicQuery ) {
+		// 	returnQuery = basicQuery;
+		// } );
+		returnQuery = {
+				$or: [
+					{ "food_name" : termRegex },
+					{ "food_description" : termRegex },
+					{ "food_type" : termRegex },
+					{ "food_tags.food_tag" : termRegex }
+				]
+			};
 	}
 
 
@@ -218,25 +225,28 @@ function createAdvancedQuery( queryType, term, restaurant_location2, price2, cal
 
 };
 
-function createBasicQuery( term, callback ) {
+// function createBasicQuery( term, callback ) {
 
-	debugger;
+// 	debugger;
 
-	var regex = new RegExp( term, "i" );
-	var returnQuery;
+// 	// console.log( "BQ term: " );
+// 	// console.log( term );
 
-	returnQuery = {
-				$or: [
-					{ "food_name" : regex },
-					{ "food_description" : regex },
-					{ "food_type" : regex },
-					{ "food_tags.food_tag" : regex }
-				]
-			};
+// 	var regex = new RegExp( term, "i" );
+// 	var returnQuery;
 
-	callback( returnQuery );
+// 	returnQuery = {
+// 				$or: [
+// 					{ "food_name" : regex },
+// 					{ "food_description" : regex },
+// 					{ "food_type" : regex },
+// 					{ "food_tags.food_tag" : regex }
+// 				]
+// 			};
 
-};
+// 	callback( returnQuery );
+
+// };
 
 // module.exports.createNewFoodEntry = function( foodObj, callback ) {
 
