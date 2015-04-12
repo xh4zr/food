@@ -3,6 +3,7 @@
 var bodyParser = require( 'body-parser' );
 var fs = require( 'fs' );
 var http = require( 'http' );
+var mongoose = require( 'mongoose' );
 
 // Handler files
 var allHandler = require( './handlers/allHandler.js' );
@@ -13,8 +14,14 @@ var searchHandler = require( './handlers/searchHandler.js' );
 
 // Static variables
 var HTTP_PORT_NUM = 8080;
+var MONGO_DB_ADDR = 'mongodb://52.11.71.104/cs360fse';
 var ROOT_DIR = "pages/";
 var TEST_DIR = "test/";
+
+
+
+// Mongoose 
+mongoose.connect( MONGO_DB_ADDR );
 
 
 

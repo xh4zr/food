@@ -1,99 +1,324 @@
 
 // Packages
 var mongoClient = require( 'mongodb' ).MongoClient;
+var mongoose = require( 'mongoose' );
+
 
 // Static variables
+var ADVSRCH_TL = "advSearchTL"; // Advanced Search - term and location option
+var ADVSRCH_TP = "advSearchTP"; // Advanced Search - term and price option
+var ADVSRCH_TC = "advSearchTC"; // Advanced Search - term and calories option
+var ADVSRCH_TLP = "advSearchTLP"; // Advanced Search - term location and price option
+var ADVSRCH_TLC = "advSearchTLC"; // Advanced Search - term location and calories option
+var ADVSRCH_TPC = "advSearchTPC"; // Advanced Search - term price and calories option
+var ADVSRCH_TLPC = "advSearchTLPC"; // Advanced Search - term location price and calories option
+var BSCSRCH = "basicSearch";
 var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
-var MONGO_DB_NAME = "admin";
-var MONGO_COLLECTION_NAME = "FoodSearchEngine";
-var ADVSRCH_L = "advSearchLP";
-var ADVSRCH_LP = "advSearchLP";
-var ADVSRCH_LC = "advSearchLC";
-var ADVSRCH_LPC = "advSearchLPC"; // Advanced Search - location price and calories option
+// var MONGO_DB_NAME = "admin";
+var MONGO_DB_NAME = "cs360fse";
+var MONGO_COLLECTION_NAME = "fooditems";
+
+// Food Item Schema definition
+var foodItemSchema = new mongoose.Schema( {
+	food_name: { type: String },
+	food_description: { type: String },
+	restaurant: { type: String },
+	restaurant_location: { type: String },
+	price: { type: Number, default: 0 },
+	calories: { type: Number, default: 0 },
+	food_type: { type: String },
+	food_tags:[ { type: String, ref: 'food_tag' } ],
+	image: { type: String }
+} );
+
+var FoodItem = mongoose.model( 'FoodItem', foodItemSchema );
 
 
 
 module.exports.advancedSearch = function( term, restaurant_location, price, calories, callback ) {
-	console.log("ADVANCED");
-	// module.exports.basicSearch( term, function( matchingDishes ) {
-	// 	callback( matchingDishes );
-	// });
 
+	determineAdvancedSearchType( term, restaurant_location, price, calories, function( queryType ) {
 
+		createAdvancedQuery( queryType, term, restaurant_location, price, calories, function( advancedQuery ) {
+
+			searchByQuery( advancedQuery, function( err, matchingDishesArr ) {
+
+				callback( matchingDishesArr );
+
+			} );		
+
+		} );
+
+	} );
 	
 };
 
 
 module.exports.basicSearch = function( term, callback ) {
 
-	var regex = new RegExp( term, "i" );
-	var basicQuery = {
+	debugger;
+
+	// var regex = new RegExp( term, "i" );
+	// var basicQuery = {
+	// 				$or: [
+	// 					{ food_name : regex },
+	// 					{ food_description : regex },
+	// 					{ food_type : regex },
+	// 					{ "food_tags.food_tag" : regex }
+	// 				]
+	// 			};
+
+	createBasicQuery( term, function( basicQuery ) {
+
+		searchByQuery( basicQuery, function( err, matchingDishes ) {
+
+			callback( matchingDishes );
+
+		} );		
+
+	} );
+
+			
+
+};
+
+function createAdvancedQuery( queryType, term, restaurant_location2, price2, calories2, callback ) {
+
+	debugger;
+
+	var termRegex = new RegExp( term, "i" );
+	var restLocRegex = new RegExp( restaurant_location2, "i" );
+	var returnQuery;
+
+	// Advanced search term and location option
+
+	if( queryType === ADVSRCH_TL ) {
+
+		returnQuery = {
+					"restaurant_location": restLocRegex,
 					$or: [
-						{ food_name : regex },
-						{ food_description : regex },
-						{ food_type : regex },
-						{ "food_tags.food_tag" : regex }
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};
+	} 
+
+	// Advanced search term and price option
+
+	else if( queryType === ADVSRCH_TP ) {
+
+		returnQuery = {
+					"price": { $lte: price2 },
+					// "price": { $type: 1 }
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
 					]
 				};
 
-	searchByQuery( basicQuery, function( matchingDishes ) {
+	}
 
-		callback( matchingDishes );
+	// Advanced Search - term and calories option
 
-	} );	
+	else if( queryType === ADVSRCH_TC ) {
+
+		returnQuery = {
+					"calories": { $lte: calories2 },
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};
+
+	}
+
+	// Advanced Search - term location and price option	
+
+	else if( queryType === ADVSRCH_TLP ) {
+
+		returnQuery = {
+					"restaurant_location": restLocRegex,
+					"price": { $lte: price2 },
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};
+	}
+
+	// Advanced Search - term location and calories option
+
+	else if( queryType === ADVSRCH_TLC ) {
+
+		returnQuery = {
+					"restaurant_location": restLocRegex,
+					"calories": { $lte: calories2 },
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};
+
+	}
+
+	// Advanced Search - term price and calories option
+
+	else if( queryType === ADVSRCH_TPC ) {
+
+		returnQuery = {
+					"price": { $lte: price2 },
+					"calories": { $lte: calories2 },
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};		
+	}
+
+	// Advanced Search - term location price and calories option
+
+	else if( queryType === ADVSRCH_TLPC ) {
+
+		returnQuery = {
+					"restaurant_location": restLocRegex,
+					"price": { $lte: price2 },
+					"calories": { $lte: calories2 },
+					$or: [
+						{ "food_name" : termRegex },
+						{ "food_description" : termRegex },
+						{ "food_type" : termRegex },
+						{ "food_tags.food_tag" : termRegex }
+					]
+				};
+
+	}
+
+	// Default option - basic search
+
+	else {
+		createBasicQuery( term, function( basicQuery ) {
+			returnQuery = basicQuery;
+		} );
+	}
+
+
+	callback( returnQuery );
 
 };
+
+function createBasicQuery( term, callback ) {
+
+	debugger;
+
+	var regex = new RegExp( term, "i" );
+	var returnQuery;
+
+	returnQuery = {
+				$or: [
+					{ "food_name" : regex },
+					{ "food_description" : regex },
+					{ "food_type" : regex },
+					{ "food_tags.food_tag" : regex }
+				]
+			};
+
+	callback( returnQuery );
+
+};
+
+// module.exports.createNewFoodEntry = function( foodObj, callback ) {
+
+// 	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+// 		if( err )
+// 			console.log( err );
+
+// 		db.collection( MONGO_COLLECTION_NAME ).insert( foodObj, function( err2, records ) {
+			
+// 			callback( err2 );
+
+// 		} );
+// 	});
+
+// };
 
 module.exports.createNewFoodEntry = function( foodObj, callback ) {
 
-	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+	var newItem = new FoodItem( foodObj );
+
+	newItem.save( function( err, newObj ) {
 		if( err )
 			console.log( err );
 
-		db.collection( MONGO_COLLECTION_NAME ).insert( foodObj, function( err2, records ) {
-			
-			callback( err2 );
+		callback( err );
 
-		} );
-	});
+	} );
 
 };
 
-function createQuery( queryType, term, callback ) {
+function determineAdvancedSearchType( term, restaurant_location, price, calories, callback ) {
 
-	var regex = new RegExp( term, "i" );
-
-
-
-};
-
-function determineAdvancedSearchType( restaurant_location, price, calories, callback ) {
-
-
-
-	if( restaurant_location && price && calories ) {
-		callback(  );
+	if( term && restaurant_location && !price && !calories ) {
+		callback( ADVSRCH_TL );
+	} else if( term && !restaurant_location && price && !calories ) {
+		callback( ADVSRCH_TP );
+	} else if( term && !restaurant_location && !price && calories ) {
+		callback( ADVSRCH_TC );
+	} else if( term && restaurant_location && price && !calories ) {
+		callback( ADVSRCH_TLP );
+	} else if( term && restaurant_location && !price && calories ) {
+		callback( ADVSRCH_TLC );
+	} else if( term && !restaurant_location && price && calories ) {
+		callback( ADVSRCH_TPC );
+	} else if( term && restaurant_location && price && calories ) {
+		callback( ADVSRCH_TLPC );
+	} else {
+		callback( BSCSRCH );
 	}
+
 };
+
+// module.exports.getAllObjects = function( callback ) {
+
+// 	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+// 		if( err )
+// 			throw err;
+
+// 		db.collection( MONGO_COLLECTION_NAME, function( err2, dishes ) {
+// 			if( err2 )
+// 				throw err2;
+
+// 			dishes.find( function( err3, allDishes ) {
+// 				if( err3 )
+// 					throw err3;
+
+// 				callback( err3, allDishes );
+// 			} );
+// 		} );
+// 	});
+
+// };
+
 
 module.exports.getAllObjects = function( callback ) {
 
-	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+	FoodItem.find( function( err, allDishesArr ) {
 		if( err )
-			throw err;
+			console.log( err );
 
-		db.collection( MONGO_COLLECTION_NAME, function( err2, dishes ) {
-			if( err2 )
-				throw err2;
-
-			dishes.find( function( err3, allDishes ) {
-				if( err3 )
-					throw err3;
-
-				callback( err3, allDishes );
-			} );
-		} );
-	});
+		callback( err, allDishesArr );
+	} );
 
 };
 
@@ -132,26 +357,29 @@ module.exports.searchByID = function( id, callback ) {
 
 function searchByQuery( query, callback ) {
 
-	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
-		var fseDB = db.db( MONGO_DB_NAME );
-		fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes ) {
-			if( err )
-				console.log( err );
+	// mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
+	// 	var fseDB = db.db( MONGO_DB_NAME );
+	// 	fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes ) {
+	// 		if( err )
+	// 			console.log( err );
 
-			// dishes.find( {
-			// 				$or: [
-			// 					{ food_name : regex },
-			// 					{ "food_tags.food_tag" : regex }
-			// 				]
-			// 			},
-			dishes.find( query, function( err2, matchingDishes ) {
-				if( err2 )
-					console.log( err2 );
+	// 		dishes.find( query, function( err2, matchingDishes ) {
+	// 			if( err2 )
+	// 				console.log( err2 );
 
-				callback( matchingDishes );
+	// 			callback( matchingDishes );
 				
-			} );
-		});
-	});
+	// 		} );
+	// 	});
+	// });
+
+	FoodItem.find( query, function( err, matchingDishesArr ) {
+		if( err )
+			console.log( err );
+
+		callback( err, matchingDishesArr );
+	} );
+
+	
 
 };
