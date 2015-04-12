@@ -52,35 +52,6 @@ module.exports.advancedSearch = function( term, restaurant_location, price, calo
 	
 };
 
-
-// module.exports.basicSearch = function( term, callback ) {
-
-// 	debugger;
-
-// 	// var regex = new RegExp( term, "i" );
-// 	// var basicQuery = {
-// 	// 				$or: [
-// 	// 					{ food_name : regex },
-// 	// 					{ food_description : regex },
-// 	// 					{ food_type : regex },
-// 	// 					{ "food_tags.food_tag" : regex }
-// 	// 				]
-// 	// 			};
-
-// 	createBasicQuery( term, function( basicQuery ) {
-
-// 		searchByQuery( basicQuery, function( err, matchingDishes ) {
-
-// 			callback( matchingDishes );
-
-// 		} );		
-
-// 	} );
-
-			
-
-// };
-
 function createAdvancedQuery( queryType, term, restaurant_location2, price2, calories2, callback ) {
 
 	debugger;
@@ -110,7 +81,6 @@ function createAdvancedQuery( queryType, term, restaurant_location2, price2, cal
 
 		returnQuery = {
 					"price": { $lte: price2 },
-					// "price": { $type: 1 }
 					$or: [
 						{ "food_name" : termRegex },
 						{ "food_description" : termRegex },
@@ -225,44 +195,6 @@ function createAdvancedQuery( queryType, term, restaurant_location2, price2, cal
 
 };
 
-// function createBasicQuery( term, callback ) {
-
-// 	debugger;
-
-// 	// console.log( "BQ term: " );
-// 	// console.log( term );
-
-// 	var regex = new RegExp( term, "i" );
-// 	var returnQuery;
-
-// 	returnQuery = {
-// 				$or: [
-// 					{ "food_name" : regex },
-// 					{ "food_description" : regex },
-// 					{ "food_type" : regex },
-// 					{ "food_tags.food_tag" : regex }
-// 				]
-// 			};
-
-// 	callback( returnQuery );
-
-// };
-
-// module.exports.createNewFoodEntry = function( foodObj, callback ) {
-
-// 	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
-// 		if( err )
-// 			console.log( err );
-
-// 		db.collection( MONGO_COLLECTION_NAME ).insert( foodObj, function( err2, records ) {
-			
-// 			callback( err2 );
-
-// 		} );
-// 	});
-
-// };
-
 module.exports.createNewFoodEntry = function( foodObj, callback ) {
 
 	var newItem = new FoodItem( foodObj );
@@ -298,28 +230,6 @@ function determineAdvancedSearchType( term, restaurant_location, price, calories
 	}
 
 };
-
-// module.exports.getAllObjects = function( callback ) {
-
-// 	mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
-// 		if( err )
-// 			throw err;
-
-// 		db.collection( MONGO_COLLECTION_NAME, function( err2, dishes ) {
-// 			if( err2 )
-// 				throw err2;
-
-// 			dishes.find( function( err3, allDishes ) {
-// 				if( err3 )
-// 					throw err3;
-
-// 				callback( err3, allDishes );
-// 			} );
-// 		} );
-// 	});
-
-// };
-
 
 module.exports.getAllObjects = function( callback ) {
 
@@ -367,29 +277,11 @@ module.exports.searchByID = function( id, callback ) {
 
 function searchByQuery( query, callback ) {
 
-	// mongoClient.connect( MONGO_DB_ADDR, function( err, db ) {
-	// 	var fseDB = db.db( MONGO_DB_NAME );
-	// 	fseDB.collection( MONGO_COLLECTION_NAME, function( err, dishes ) {
-	// 		if( err )
-	// 			console.log( err );
-
-	// 		dishes.find( query, function( err2, matchingDishes ) {
-	// 			if( err2 )
-	// 				console.log( err2 );
-
-	// 			callback( matchingDishes );
-				
-	// 		} );
-	// 	});
-	// });
-
 	FoodItem.find( query, function( err, matchingDishesArr ) {
 		if( err )
 			console.log( err );
 
 		callback( err, matchingDishesArr );
 	} );
-
-	
 
 };

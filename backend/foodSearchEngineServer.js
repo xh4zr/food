@@ -31,7 +31,7 @@ var express = require( 'express' );
 var app = express();
 app.use( bodyParser() );
 app.use( '/', express.static( ROOT_DIR, { maxAge: 60*60*1000 } ) ); // maxAge: http://blog.modulus.io/nodejs-and-express-static-content
-app.use( '/test', express.static( TEST_DIR, { maxAge: 60*60*1000 } ) ); // maxAge: http://blog.modulus.io/nodejs-and-express-static-content
+app.use( '/test', express.static( TEST_DIR, { maxAge: 60*60*1000 } ) );
 
 http.createServer( app ).listen( HTTP_PORT_NUM );
 
