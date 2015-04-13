@@ -4,6 +4,7 @@ var mongoClient = require( 'mongodb' ).MongoClient;
 var mongoose = require( 'mongoose' );
 
 
+
 // Static variables
 var ADVSRCH_TL = "advSearchTL"; // Advanced Search - term and location option
 var ADVSRCH_TP = "advSearchTP"; // Advanced Search - term and price option
@@ -17,18 +18,13 @@ var MONGO_DB_ADDR = 'mongodb://52.11.71.104';
 var MONGO_DB_NAME = "cs360fse";
 var MONGO_COLLECTION_NAME = "fooditems";
 
+
+
 // Schemas
-// var foodTagSchema = new mongoose.Schema( {
-// 	food_name: { type: String },
-// 	food_description: { type: String },
-// 	restaurant: { type: String },
-// 	restaurant_location: { type: String },
-// 	price: { type: Number, default: 0 },
-// 	calories: { type: Number, default: 0 },
-// 	food_type: { type: String },
-// 	food_tags:[ { type: String, ref: 'food_tag' } ],
-// 	image: { type: String }
-// } );
+// http://mongoosejs.com/docs/2.7.x/docs/schematypes.html
+var foodTagSchema = new mongoose.Schema( {
+	food_tag: String
+} );
 
 var foodItemSchema = new mongoose.Schema( {
 	food_name: { type: String },
@@ -38,13 +34,15 @@ var foodItemSchema = new mongoose.Schema( {
 	price: { type: Number, default: 0 },
 	calories: { type: Number, default: 0 },
 	food_type: { type: String },
-	food_tags:[ { type: String, ref: 'food_tag' } ],
+	food_tags:[ foodTagSchema ],
 	image: { type: String }
 } );
 
 var FoodItem = mongoose.model( 'FoodItem', foodItemSchema );
 
 
+
+// Search functions
 
 module.exports.advancedSearch = function( term, restaurant_location, price, calories, callback ) {
 
@@ -207,9 +205,20 @@ function createAdvancedQuery( queryType, term, restaurant_location2, price2, cal
 
 };
 
-module.exports.createNewFoodEntry = function( foodObj, callback ) {
+module.exports.createNewFoodEntry = function( foodJSON, callback ) {
 
-	var newItem = new FoodItem( foodObj );
+try{
+
+	var foodObj = null;
+
+} catch ( e ) {
+
+	throw e;
+
+}
+
+
+	var newItem = new FoodItem( foodJSON );
 
 	newItem.save( function( err, newObj ) {
 		if( err )
