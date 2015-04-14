@@ -1,14 +1,11 @@
 angular.module('app.list',[]).controller('listCtrl', function($scope, foodApi) {
     window.d = $scope;
-    $scope.results = foodApi.results;
-    $scope.selectedFood = null;
-    $scope.setSelectedFood = function(food){
-        $scope.selectedFood = food;
-    }
-        //function that displays things on click
-    $scope.isSelectedFood = function(food){
-        return $scope.selectedFood !== null && food.name === $scope.selectedFood.name;
-    }
-    
+    $scope.api = foodApi;
 
+    $scope.isSelected = function(index) {
+        if ($scope.api.selected == $scope.api.results[index]) {
+            return true;
+        }
+        else return false;
+    }
 });

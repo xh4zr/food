@@ -7,3 +7,7 @@
 	width:70%;
 	float:right;
 }
+
+.selected {
+	border: 1px solid #000;
+}
