@@ -16,7 +16,19 @@ function searchCtrl($scope, foodApi) {
 		if ($scope.showAdv) {
 			//Send search obj
 			console.log($scope.searchObj);
-			//foodApi.searchText = $scope.searchObj;
+			foodApi.searchText = $scope.api.searchText;
+		
+			if ($scope.searchObj.location)
+				foodApi.searchText += '&location=' + $scope.searchObj.location;
+
+			if ($scope.searchObj.price)
+				foodApi.searchText += '&price=' + $scope.searchObj.price
+
+			if ($scope.searchObj.calories)
+				foodApi.searchText += '&calories=' + $scope.searchObj.calories;
+
+			foodApi.search();
+			console.log("Searching " + foodApi.searchText);
 		} else {
 			foodApi.search();
 		}
