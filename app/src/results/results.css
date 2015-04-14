@@ -22,16 +22,24 @@
 #selectedFood {
 	text-align: center;
 	outline-style: double;
-	width: 500px;
-	height: 300px;
+	width: 600px;
+	height: 700px;
 	margin-left: auto;
 	margin-right: auto;
 
 }
 
 #description {
+	width: 550px;
+	margin-left: auto;
 	font-size: .5em;
-	text-align:center;
+	text-align:left;
+
+}
+
+#descriptionList {
+	font-size:.5em;
+	text-align:left;
 
 }
 

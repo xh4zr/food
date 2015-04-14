@@ -2,7 +2,7 @@
 	<div id = "foodListBanner">Results</div>
 	<div id="foodList" ng-click="handleClick($index)" ng-class="{selected:item==api.selected}" ng-repeat="item in api.results">
 		{{item.food_name}}<br>
-		<div id="description">
+		<div id="descriptionList">
 			{{item.food_description}}
 		</div>
 	</div>
