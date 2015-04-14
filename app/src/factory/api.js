@@ -6,6 +6,7 @@ function foodApi($http){
 	factory.searchText;
 	factory.results;
 	factory.selected;
+	factory.details;
 
 	factory.search = function() {
 		$http.get('/search?term=' + factory.searchText).success(function(data){
@@ -15,7 +16,7 @@ function foodApi($http){
 	
 	factory.getDetails = function(id) {
 		$http.get('/details?id=' + factory.selected.id).success(function(data){
-			factory.selected = factory.results[0];
+			factory.details = data[0];
 		});
 	}
 

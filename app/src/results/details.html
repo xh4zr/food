@@ -1,10 +1,14 @@
 <div>
-	Details 
+	Details
 	<div>
-		{{api.selected.food_name}}<br>
-		{{api.selected.food_description}}
+		Name: {{api.details.food_name}}<br>
+		Description: {{api.details.food_description}}
 	</div>
-	<div>{{api.selected.restaurant}} </div>
-	<div>{{api.selected.restaurant_location}} </div>
-	<div>{{api.selected.phone}}</div>
+	<div>Restuarant: {{api.details.restaurant}} </div>
+	<div>Location: {{api.details.restaurant_location}} </div>
+	<div>Phone: {{api.details.phone}}</div>
+	<div>Calories: {{api.details.calories}}</div>
+	<div><img src="{{api.details.image}}"></div>
+	<div>Price: {{api.details.price}}</div>
+	<div>Type: {{api.details.Type}}</div>
 </div>

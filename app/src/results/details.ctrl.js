@@ -1,4 +1,3 @@
 angular.module('app.details',[]).controller('detailsCtrl', function($scope, foodApi) {
-    $scope.api = foodApi;
-
+	$scope.api = foodApi;
 });
