@@ -11,8 +11,7 @@
 		Price<input id = "advBar" type="text" ng-model="searchObj.price"><br>
 	</div>
 	
-
-	<div ng-hide="isValid">Not valid input. Only letters are allowed.</div>
+	<div id = "notValid" ng-hide="isValid">Not valid input. Only letters are allowed.</div>
 
 	<div id = "bothButtons">	
 		<a id = "searchButton" href="#/results" ng-click="handleClick()">Search</a>

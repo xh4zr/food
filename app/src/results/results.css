@@ -1,11 +1,45 @@
 .results-list {
 	width: 30%;
 	float: left;
+	height: 500px;
+	background-color: white;
+	font-size: 2.5em;
+	outline-style: double;
+}
+
+#foodListBanner {
+	height: 60px;
+  	text-align: center;
+}
+
+#detailsBanner {
+	height: 100px;
+  	text-align: center;
+    font-size: 1.8em;
+
+}
+
+#selectedFood {
+	text-align: center;
+	outline-style: double;
+	width: 500px;
+	height: 300px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+#description {
+	font-size: .5em;
+	text-align:center;
+
 }
 
 .results-details {
 	width:70%;
+	height: 500px;
 	float:right;
+	font-size:3em;
 }
 
 .selected {

@@ -15,6 +15,7 @@ function searchCtrl($scope, foodApi) {
 
 		if ($scope.showAdv) {
 			//Send search obj
+			//foodApi.search();
 			console.log($scope.searchObj);
 			foodApi.searchText = $scope.api.searchText;
 		
